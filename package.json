@@ -1,0 +1,18 @@
+{
+  "name": "composio",
+  "version": "1.0.0",
+  "description": "Composing static html blog pages",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -w"
+  },
+  "files": [
+    "dist/index.js"
+  ],
+  "author": "Jurgis Bridzius",
+  "dependencies": {
+    "@types/node": "^8.0.32",
+    "typescript": "^2.5.3"
+  }
+}
