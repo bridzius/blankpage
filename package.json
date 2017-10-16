@@ -1,5 +1,5 @@
 {
-  "name": "composio",
+  "name": "blankpage",
   "version": "1.0.0",
   "description": "Composing static html blog pages",
   "main": "dist/index.js",
