@@ -1,7 +1,15 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rename, statSync, writeFileSync } from "fs";
-import { join } from "path";
-import { cwd } from "process";
-import * as website from "./website.json";
+import { extname, join } from "path";
+import { argv, cwd } from "process";
+
+function getWebsiteConfig(args) {
+  const simplifiedArgs = args.slice(2);
+  if (extname(simplifiedArgs[0]) === ".json" && existsSync(simplifiedArgs[0])) {
+    return JSON.parse(readFileSync(simplifiedArgs[0]).toString());
+  } else {
+    throw Error("No website.json specified");
+  }
+}
 
 function getIndexTemplate(data) {
   const templatePath = join(cwd(), "template.html");
@@ -29,7 +37,8 @@ function getAllFileContent() {
 }
 
 function createWebsite(fileName) {
-  const template = getIndexTemplate(website);
+  const websiteConfig = getWebsiteConfig(argv);
+  const template = getIndexTemplate(websiteConfig);
   const fileContent = getAllFileContent();
   const filePath = `.public/${fileName}.html`;
   writeFileSync(filePath, template[0]);
