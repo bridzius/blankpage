@@ -5,13 +5,16 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc -w"
+    "start": "tsc -w",
+    "verify": "tslint '*.ts'"
   },
   "files": [
     "dist/index.js"
   ],
   "author": "Jurgis Bridzius",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "tslint": "^5.7.0",
     "@types/node": "^8.0.32",
     "typescript": "^2.5.3"
   }
