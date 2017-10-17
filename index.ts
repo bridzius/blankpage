@@ -1,10 +1,29 @@
-import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rename, statSync, writeFileSync } from "fs";
-import { extname, join } from "path";
-import { argv, cwd } from "process";
+#!/usr/bin/env node
 
-function getWebsiteConfig(args) {
-  const simplifiedArgs = args.slice(2);
-  if (extname(simplifiedArgs[0]) === ".json" && existsSync(simplifiedArgs[0])) {
+import {
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rename,
+  statSync,
+  writeFileSync,
+} from "fs";
+import {
+  extname,
+  join,
+} from "path";
+import {
+  argv,
+  cwd,
+} from "process";
+
+function getConfig(args) {
+  const simplifiedArgs: string[] = args.slice(2);
+  if (typeof simplifiedArgs[0] === "string" &&
+    extname(simplifiedArgs[0]) === ".json" &&
+    existsSync(simplifiedArgs[0])) {
     return JSON.parse(readFileSync(simplifiedArgs[0]).toString());
   } else {
     throw Error("No website.json specified");
@@ -29,23 +48,44 @@ function getFileContent(filePath) {
   return fileExists ? readFileSync(filePath).toString().split("\n") : "";
 }
 
-function getAllFileContent() {
-  const textFiles = readdirSync(join(cwd(), "text"));
+function getAllFileContent(inputDir) {
+  const textFiles = readdirSync(join(cwd(), inputDir));
   return textFiles.reduce((output, file) => {
-    return output.concat(getFileContent(join(cwd(), "text", file)));
+    return output.concat(getFileContent(join(cwd(), inputDir, file)));
   }, []);
 }
 
-function createWebsite(fileName) {
-  const websiteConfig = getWebsiteConfig(argv);
-  const template = getIndexTemplate(websiteConfig);
-  const fileContent = getAllFileContent();
-  const filePath = `.public/${fileName}.html`;
-  writeFileSync(filePath, template[0]);
-  fileContent.forEach((line) => {
-    appendFileSync(filePath, `<p>${line}</p>`);
-  });
-  appendFileSync(filePath, template[1]);
+function verifyConfig(config) {
+  if (isUndefined(config, "input")) {
+    throw Error("No input defined in website.json (input: 'dir where text files are')");
+  }
+  if (isUndefined(config, "output")) {
+    throw Error("No output defined in website.json (output: 'outputDir')");
+  }
 }
 
-createWebsite("index");
+function createOutputFile(outputDir, filename = "index") {
+  if (!existsSync(join(cwd(), outputDir))) {
+    mkdirSync(join(cwd(), outputDir));
+  }
+  return join(outputDir, `${filename}.html`);
+}
+
+function isUndefined(object: object, property: string) {
+  return !object.hasOwnProperty(property);
+}
+
+function createWebsite() {
+  const Config = getConfig(argv);
+  verifyConfig(Config);
+  const OutputFile = createOutputFile(Config.output, Config.filename);
+  const template = getIndexTemplate(Config);
+  const fileContent = getAllFileContent(Config.input);
+  writeFileSync(OutputFile, template[0]);
+  fileContent.forEach((line) => {
+    appendFileSync(OutputFile, `<p>${line}</p>`);
+  });
+  appendFileSync(OutputFile, template[1]);
+}
+
+createWebsite();

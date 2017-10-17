@@ -3,6 +3,9 @@
 {
   "title": "Website.com",
   "header": "Neat website",
-  "subheader": "Javascript junkie."
+  "subheader": "Javascript junkie.",
+  "input": "InputDirectoryWithTextFiles",
+  "output": "OutDirForHTMLFile",
+  "filename": "HTMLFileName"
 }
 ```
