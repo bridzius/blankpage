@@ -17,5 +17,10 @@ pipeline {
                 sh 'npm run verify'
             }
         }
+        stage('Test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
     }
 }
