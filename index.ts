@@ -49,7 +49,7 @@ function getFileContent(filePath) {
 }
 
 function getAllFileContent(inputDir) {
-  const textFiles = readdirSync(join(cwd(), inputDir));
+  const textFiles = readdirSync(join(cwd(), inputDir)).reverse();
   return textFiles.reduce((output, file) => {
     return output.concat(getFileContent(join(cwd(), inputDir, file)));
   }, []);
