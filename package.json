@@ -11,7 +11,8 @@
     "url": "https://github.com/bridzius/composer.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "yarn test && yarn verify",
+    "test": "NODE_ENV=test mocha -r ts-node/register src/*.test.ts",
     "start": "tsc -w",
     "verify": "tslint '*.ts'"
   },
@@ -21,8 +22,15 @@
   "author": "Jurgis Bridzius",
   "dependencies": {},
   "devDependencies": {
-    "tslint": "^5.7.0",
+    "@types/chai": "^4.0.8",
+    "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.32",
+    "@types/sinon": "^4.0.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.2",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
     "typescript": "^2.5.3"
   }
 }
