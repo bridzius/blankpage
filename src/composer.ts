@@ -16,16 +16,16 @@ import {
     argv,
     cwd,
 } from "process";
-import ConfigurationError from "./config-error";
+import Config from "./config";
 
-function getConfig(args) {
+function getConfigFile(args) {
     const simplifiedArgs: string[] = args.slice(2);
     if (typeof simplifiedArgs[0] === "string" &&
         extname(simplifiedArgs[0]) === ".json" &&
         existsSync(simplifiedArgs[0])) {
-        return JSON.parse(readFileSync(simplifiedArgs[0]).toString());
+        return simplifiedArgs[0];
     } else {
-        throw Error("No website.json specified");
+        throw Error("No input file specified");
     }
 }
 
@@ -54,35 +54,24 @@ function getAllFileContent(inputDir) {
     }, []);
 }
 
-function verifyConfig(config) {
-    if (isUndefined(config, "input")) {
-        throw new ConfigurationError("No input defined in website.json (input: 'dir where text files are')");
-    }
-    if (isUndefined(config, "output")) {
-        throw new ConfigurationError("No output defined in website.json (output: 'outputDir')");
-    }
-}
-
-function createOutputFile(outputDir, filename = "index") {
+function createOutputFile(outputDir, filename) {
     if (!existsSync(join(cwd(), outputDir))) {
         mkdirSync(join(cwd(), outputDir));
     }
-    return join(outputDir, `${filename}.html`);
-}
-
-function isUndefined(object: object, property: string) {
-    return !object.hasOwnProperty(property);
+    return join(outputDir, `${filename}`);
 }
 
 export default function createWebsite() {
-    const Config = getConfig(argv);
-    verifyConfig(Config);
-    const OutputFile = createOutputFile(Config.output, Config.filename);
-    const template = getIndexTemplate(Config);
-    const fileContent = getAllFileContent(Config.input);
+    const configFile = getConfigFile(argv);
+    const Configuration = new Config(configFile);
+    const OutputFile = createOutputFile(Configuration.output, Configuration.filename);
+    const template = getIndexTemplate(Configuration);
+    const fileContent = getAllFileContent(Configuration.input);
     writeFileSync(OutputFile, template[0]);
     fileContent.forEach((line) => {
-        appendFileSync(OutputFile, `<p>${line}</p>`);
+        if (line !== "") {
+            appendFileSync(OutputFile, `<p>${line}</p>`);
+        }
     });
     appendFileSync(OutputFile, template[1]);
 }
