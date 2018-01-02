@@ -11,13 +11,14 @@
     "url": "https://github.com/bridzius/blankpage.git"
   },
   "scripts": {
-    "prepublishOnly": "NODE_ENV=test mocha -r ts-node/register src/*.test.ts && tslint src/*.ts",
+    "prepublishOnly": "NODE_ENV=test mocha -r ts-node/register src/*.test.ts && tslint src/*.ts && tsc",
+    "compile": "tsc",
     "test": "mocha -r ts-node/register src/*.test.ts",
     "start": "tsc -w",
     "verify": "tslint '*.ts'"
   },
   "files": [
-    "dist/index.js"
+    "dist/"
   ],
   "author": "Jurgis Bridzius",
   "dependencies": {},
