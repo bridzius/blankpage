@@ -55,7 +55,7 @@ function getAllFileContent(inputDir) {
             time: statSync(join(cwd(), inputDir, file)).mtime.getTime(),
           };
     });
-    const sortedFiles = parsedFiles.sort((file1, file2) => file1.time - file2.time).map((file) => file.name);
+    const sortedFiles = parsedFiles.sort((file1, file2) => file2.time - file1.time).map((file) => file.name);
     return sortedFiles.reduce((output, file) => {
         return output.concat(getFileContent(join(cwd(), inputDir, file)));
     }, []);
