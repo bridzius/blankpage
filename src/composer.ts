@@ -48,8 +48,15 @@ function getFileContent(filePath) {
 }
 
 function getAllFileContent(inputDir) {
-    const textFiles = readdirSync(join(cwd(), inputDir)).reverse();
-    return textFiles.reduce((output, file) => {
+    const textFiles = readdirSync(join(cwd(), inputDir));
+    const parsedFiles = textFiles.map((file) => {
+        return {
+            name: file,
+            time: statSync(join(cwd(), inputDir, file)).mtime.getTime(),
+          };
+    });
+    const sortedFiles = parsedFiles.sort((file1, file2) => file1.time - file2.time).map((file) => file.name);
+    return sortedFiles.reduce((output, file) => {
         return output.concat(getFileContent(join(cwd(), inputDir, file)));
     }, []);
 }
