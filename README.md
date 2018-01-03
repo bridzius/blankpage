@@ -13,6 +13,7 @@ $ blankpage website.json
   "header": "Neat website",
   "subheader": "Javascript junkie.",
   "input": "InputDirectoryWithTextFiles",
+  "inputType": "fs|git",
   "output": "OutDirForHTMLFile",
   "filename": "HTMLFileName"
 }

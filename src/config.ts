@@ -39,6 +39,9 @@ function validate(config) {
     if (isUndefined(config, "output")) {
         throw new ConfigurationError("No output defined in website.json (output: 'outputDir')");
     }
+    if (!isUndefined(config, "inputType") && !(["fs", "git"].some((type) => type === config.inputType))) {
+        throw new ConfigurationError("Invalid input type. Choose from git|fs");
+    }
 }
 
 function isUndefined(object: object, property: string) {
