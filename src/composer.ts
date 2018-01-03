@@ -1,3 +1,4 @@
+import {execSync} from "child_process";
 import {
     appendFileSync,
     existsSync,
@@ -47,12 +48,21 @@ function getFileContent(filePath) {
     return fileExists ? readFileSync(filePath).toString().split("\n") : "";
 }
 
-function getAllFileContent(inputDir) {
+function getFSDate(filePath) {
+    return statSync(filePath).mtime.getTime();
+}
+
+function getGitDate(filePath) {
+    const gitDate = execSync(`git log -1 --format="%at" -- ${filePath}`);
+    return parseInt(gitDate.toString(), 10);
+}
+
+function getAllFileContent(inputDir, inputType) {
     const textFiles = readdirSync(join(cwd(), inputDir));
     const parsedFiles = textFiles.map((file) => {
         return {
             name: file,
-            time: statSync(join(cwd(), inputDir, file)).mtime.getTime(),
+            time: inputType === "git" ? getGitDate(join(inputDir, file)) : getFSDate(join(cwd(), inputDir, file)),
           };
     });
     const sortedFiles = parsedFiles.sort((file1, file2) => file2.time - file1.time).map((file) => file.name);
@@ -73,7 +83,7 @@ export default function createWebsite() {
     const Configuration = new Config(configFile);
     const OutputFile = createOutputFile(Configuration.output, Configuration.filename);
     const template = getIndexTemplate(Configuration);
-    const fileContent = getAllFileContent(Configuration.input);
+    const fileContent = getAllFileContent(Configuration.input, Configuration.inputType);
     writeFileSync(OutputFile, template[0]);
     fileContent.forEach((line) => {
         if (line !== "") {

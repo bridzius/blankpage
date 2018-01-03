@@ -8,6 +8,7 @@ export default class BlankpageConfig {
     public filename: any;
     public title: string;
     public input: string;
+    public inputType: string;
     public output: string;
     public header: string;
     public subheader: string;
@@ -16,6 +17,7 @@ export default class BlankpageConfig {
         validate(conf);
         this.title = conf.title || "";
         this.input = conf.input || "txt";
+        this.inputType = conf.inputType || "fs";
         this.output = conf.output || "dist";
         this.header = conf.header || "";
         this.subheader = conf.subheader || "";

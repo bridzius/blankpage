@@ -21,7 +21,6 @@
     "dist/"
   ],
   "author": "Jurgis Bridzius",
-  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/mocha": "^2.2.45",
