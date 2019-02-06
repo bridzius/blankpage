@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import ConfigurationError from "./config-error";
 
-interface BlankConfig {
+interface IBlankConfig {
   filename: any;
   title: string;
   input: string;
@@ -11,7 +11,7 @@ interface BlankConfig {
   subheader: string;
 }
 
-export default class BlankpageConfig implements BlankConfig {
+export default class BlankpageConfig implements IBlankConfig {
   public title: any;
   public input: any;
   public inputType: any;

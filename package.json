@@ -11,11 +11,11 @@
     "url": "https://github.com/bridzius/blankpage.git"
   },
   "scripts": {
-    "prepublishOnly": "NODE_ENV=test mocha -r ts-node/register src/*.test.ts && tslint src/*.ts && npm run compile",
+    "prepublishOnly": "NODE_ENV=test mocha -r ts-node/register src/*.test.ts && tslint src/**/*.ts && npm run compile",
     "compile": "tsc",
     "test": "mocha -r ts-node/register src/*.test.ts",
     "start": "tsc -w",
-    "verify": "tslint '*.ts'"
+    "verify": "tslint 'src/**/*.ts'"
   },
   "files": [
     "dist/"
