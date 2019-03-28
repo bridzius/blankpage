@@ -1,33 +1,35 @@
 import { existsSync, readFileSync } from "fs";
 import ConfigurationError from "./config-error";
 
-interface IBlankConfig {
-  filename: any;
+export interface IBlankConfig {
+  filename: string;
   title: string;
   input: string;
   inputType: string;
   output: string;
-  header: string;
-  subheader: string;
+  slots: {
+    subheader: string;
+    header: string;
+  };
 }
 
-export default class BlankpageConfig implements IBlankConfig {
-  public title: any;
-  public input: any;
-  public inputType: any;
-  public output: any;
-  public header: any;
-  public subheader: any;
-  public filename: any;
+export class BlankpageConfig implements IBlankConfig {
+  public filename: string;
+  public title: string;
+  public input: string;
+  public inputType: string;
+  public output: string;
+  public slots: { subheader: string; header: string };
   constructor(private confpath: any) {
     const conf = getBlankConf(confpath);
     validate(conf);
+    this.slots = { header: "", subheader: "" };
     this.title = conf.title || "";
     this.input = conf.input || "txt";
     this.inputType = conf.inputType || "fs";
     this.output = conf.output || "dist";
-    this.header = conf.header || "";
-    this.subheader = conf.subheader || "";
+    this.slots.header = conf.header || "";
+    this.slots.subheader = conf.subheader || "";
     this.filename = conf.filename || "index.html";
   }
 }

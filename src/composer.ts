@@ -10,7 +10,7 @@ import {
 } from "fs";
 import { extname, join } from "path";
 import { argv, cwd } from "process";
-import Config from "./config";
+import { BlankpageConfig, IBlankConfig } from "./config";
 
 function getConfigFile(args) {
   const simplifiedArgs: string[] = args.slice(2);
@@ -25,20 +25,27 @@ function getConfigFile(args) {
   }
 }
 
-function getIndexTemplate(data) {
+function getIndexTemplate(data: IBlankConfig) {
   const templatePath = join(cwd(), "template.html");
   const templateExists = existsSync(templatePath);
   if (!templateExists) {
     throw Error("no template file");
   }
   let template = readFileSync(templatePath).toString();
-  for (const opt of Object.keys(data)) {
-    template = template.replace(`<//${opt.toUpperCase()}//>`, data[opt]);
+  template = template.replace("<head>", `<head>\n<title>${data.title}</title>`);
+  for (const opt in data.slots) {
+    if (data.slots.hasOwnProperty(opt)) {
+      template = template.replace(
+        `<//${opt.toUpperCase()}//>`,
+        data.slots[opt],
+      );
+    }
   }
   return template.split("<//CONTENT//>");
 }
 
 function getFileContent(filePath) {
+  console.log(`Reading ${filePath}`);
   const fileExists = existsSync(filePath);
   return fileExists
     ? readFileSync(filePath)
@@ -84,7 +91,7 @@ function createOutputFile(outputDir, filename) {
 
 export default function createWebsite() {
   const configFile = getConfigFile(argv);
-  const Configuration = new Config(configFile);
+  const Configuration = new BlankpageConfig(configFile);
   const OutputFile = createOutputFile(
     Configuration.output,
     Configuration.filename,
@@ -100,6 +107,6 @@ export default function createWebsite() {
       appendFileSync(OutputFile, `<p>${line}</p>\n`);
     }
   });
-  console.log(`Generating blankpage to ${OutputFile}`);
   appendFileSync(OutputFile, template[1]);
+  console.log(`Output blankpage to ${OutputFile}`);
 }

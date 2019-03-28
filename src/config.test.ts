@@ -1,75 +1,70 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 import * as fs from "fs";
 import "mocha";
-import {
-    sandbox,
-} from "sinon";
-import Config from "./config";
+import { sandbox } from "sinon";
+import { BlankpageConfig, IBlankConfig } from "./config";
 import ConfigurationError from "./config-error";
 let box;
-let config;
+let config: IBlankConfig;
 describe("config.ts", () => {
+  before(() => {
+    box = sandbox.create();
+  });
 
-    before(() => {
-        box = sandbox.create();
-    });
-
-    afterEach(() => {
-        box.restore();
-    });
-    it("should throw an error if no path is provided to constructor", () => {
-        expect(() => {
-            config = new Config("");
-        }).to.throw(ConfigurationError);
-    });
-    it("should throw if no input is defined in website.json", () => {
-        box.stub(fs, "existsSync").returns(true);
-        box.stub(fs, "readFileSync").returns(`{
+  afterEach(() => {
+    box.restore();
+  });
+  it("should throw an error if no path is provided to constructor", () => {
+    expect(() => {
+      config = new BlankpageConfig("");
+    }).to.throw(ConfigurationError);
+  });
+  it("should throw if no input is defined in website.json", () => {
+    box.stub(fs, "existsSync").returns(true);
+    box.stub(fs, "readFileSync").returns(`{
             "title": "Website",
             "header": "My website",
             "output": "welcome"
         }`);
-        expect(() => {
-            config = new Config("hello.json");
-        }).to.throw(ConfigurationError);
-    });
-    it("should throw if no output is defined in website.json", () => {
-        box.stub(fs, "existsSync").returns(true);
-        box.stub(fs, "readFileSync").returns(`{
+    expect(() => {
+      config = new BlankpageConfig("hello.json");
+    }).to.throw(ConfigurationError);
+  });
+  it("should throw if no output is defined in website.json", () => {
+    box.stub(fs, "existsSync").returns(true);
+    box.stub(fs, "readFileSync").returns(`{
             "title": "Website",
             "header": "My website",
             "input": "welcome"
             }`);
-        expect(() => {
-            config = new Config("hello.json");
-        }).to.throw(ConfigurationError);
-    });
-    it("should throw if inputType is random", () => {
-        box.stub(fs, "existsSync").returns(true);
-        box.stub(fs, "readFileSync").returns(`{
+    expect(() => {
+      config = new BlankpageConfig("hello.json");
+    }).to.throw(ConfigurationError);
+  });
+  it("should throw if inputType is random", () => {
+    box.stub(fs, "existsSync").returns(true);
+    box.stub(fs, "readFileSync").returns(`{
             "title": "Website",
             "header": "My website",
             "input": "welcome",
             "output": "goodbye",
             "inputType": "email"
         }`);
-        expect(() => {
-            config = new Config("hello.json");
-        }).to.throw(ConfigurationError);
-    });
-    it("should not throw if inputType is git", () => {
-        box.stub(fs, "existsSync").returns(true);
-        box.stub(fs, "readFileSync").returns(`{
+    expect(() => {
+      config = new BlankpageConfig("hello.json");
+    }).to.throw(ConfigurationError);
+  });
+  it("should not throw if inputType is git", () => {
+    box.stub(fs, "existsSync").returns(true);
+    box.stub(fs, "readFileSync").returns(`{
             "title": "Website",
             "header": "My website",
             "input": "welcome",
             "output": "random",
             "inputType": "git"
         }`);
-        expect(() => {
-            config = new Config("hello.json");
-        }).to.not.throw(ConfigurationError);
-    });
+    expect(() => {
+      config = new BlankpageConfig("hello.json");
+    }).to.not.throw(ConfigurationError);
+  });
 });
