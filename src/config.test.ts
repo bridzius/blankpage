@@ -1,14 +1,14 @@
 import { expect } from "chai";
 import * as fs from "fs";
 import "mocha";
-import { sandbox } from "sinon";
+import * as sinon from "sinon";
 import { BlankpageConfig, IBlankConfig } from "./config";
-import ConfigurationError from "./config-error";
+import {ConfigurationError} from "./config-error";
 let box;
 let config: IBlankConfig;
 describe("config.ts", () => {
   before(() => {
-    box = sandbox.create();
+    box = sinon.createSandbox();
   });
 
   afterEach(() => {

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import ConfigurationError from "./config-error";
+import { CONF_ERROR_MESSAGES, ConfigurationError } from "./config-error";
 
 export interface IBlankConfig {
   filename: string;
@@ -38,25 +38,21 @@ function getBlankConf(confpath) {
   if (existsSync(confpath)) {
     return JSON.parse(readFileSync(confpath).toString());
   }
-  throw new ConfigurationError("Configuration file does not exist");
+  throw new ConfigurationError(CONF_ERROR_MESSAGES.CONFIG_FILE_MISSING);
 }
 
 function validate(config) {
   if (isUndefined(config, "input")) {
-    throw new ConfigurationError(
-      "No input defined in website.json (input: 'dir where text files are')",
-    );
+    throw new ConfigurationError(CONF_ERROR_MESSAGES.NO_INPUT_DEFINED);
   }
   if (isUndefined(config, "output")) {
-    throw new ConfigurationError(
-      "No output defined in website.json (output: 'outputDir')",
-    );
+    throw new ConfigurationError(CONF_ERROR_MESSAGES.NO_OUTPUT_DEFINED);
   }
   if (
     !isUndefined(config, "inputType") &&
     !["fs", "git"].some((type) => type === config.inputType)
   ) {
-    throw new ConfigurationError("Invalid input type. Choose from git|fs");
+    throw new ConfigurationError(CONF_ERROR_MESSAGES.INVALID_INPUT_TYPE);
   }
 }
 
