@@ -3,7 +3,7 @@ import * as fs from "fs";
 import "mocha";
 import * as sinon from "sinon";
 import { BlankpageConfig, IBlankConfig } from "./config";
-import {ConfigurationError} from "./config-error";
+import { ConfigurationError } from "./config-error";
 let box;
 let config: IBlankConfig;
 describe("config.ts", () => {

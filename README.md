@@ -86,7 +86,8 @@ Example:
   "header": "Neat website",
   "subheader": "Javascript junkie.",
   "input": "InputDirectoryWithTextFiles",
-  "inputType": "fs|git",
+  "inputSort": "fs|git",
+  "inputFormat": "txt|md",
   "output": "OutDirForHTMLFile",
   "filename": "HTMLFileName"
 }
@@ -101,7 +102,8 @@ Configuration options:
 | `header`| The header of the website | `""` |
 | `subheader` | The subheader of the website | `""` |
 | `input`     | The input directory, where the text files are located | `txt`|
-| `inputType` | Sorting type for the files:<br> `fs` will sort by name, for example: a > b > c.<br>`git` will sort by the order in which files were added to version control. | `fs` |
+| `inputSort` | Sorting type for the files:<br> `fs` will sort by name, for example: a > b > c.<br>`git` will sort by the order in which files were added to version control. | `fs` |
+| `inputFormat` | The format of the input files. Support: `md` - Markdown, `txt` - Plain text files| `txt` |
 | `output`    | The output directory, where the index file will be generated. | `dist` |
 | `filename`  | The name of the index file. | `index.html` |
 <!-- prettier-ignore-end -->

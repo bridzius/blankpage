@@ -1,57 +1,24 @@
-import { execSync } from "child_process";
+import { execSync } from 'child_process';
 import {
-  appendFileSync,
   existsSync,
   mkdirSync,
   readdirSync,
-  readFileSync,
   statSync,
   writeFileSync,
-} from "fs";
-import { extname, join } from "path";
-import { argv, cwd } from "process";
-import { BlankpageConfig, IBlankConfig } from "./config";
+} from 'fs';
+import { join } from 'path';
+import { argv, cwd } from 'process';
+import { getConfigFile } from './config';
+import { renderTemplate } from './templater';
+import { createParser } from './parser-factory';
 
-function getConfigFile(args) {
-  const simplifiedArgs: string[] = args.slice(2);
-  if (
-    typeof simplifiedArgs[0] === "string" &&
-    extname(simplifiedArgs[0]) === ".json" &&
-    existsSync(simplifiedArgs[0])
-  ) {
-    return simplifiedArgs[0];
-  } else {
-    throw Error("No input file specified");
-  }
-}
-
-function getIndexTemplate(data: IBlankConfig) {
-  const templatePath = join(cwd(), "template.html");
-  const templateExists = existsSync(templatePath);
-  if (!templateExists) {
-    throw Error("no template file");
-  }
-  let template = readFileSync(templatePath).toString();
-  template = template.replace("<head>", `<head>\n<title>${data.title}</title>`);
-  for (const opt in data.slots) {
-    if (data.slots.hasOwnProperty(opt)) {
-      template = template.replace(
-        `<//${opt.toUpperCase()}//>`,
-        data.slots[opt],
-      );
-    }
-  }
-  return template.split("<//CONTENT//>");
-}
-
-function getFileContent(filePath) {
-  console.log(`Reading ${filePath}`);
-  const fileExists = existsSync(filePath);
-  return fileExists
-    ? readFileSync(filePath)
-        .toString()
-        .split("\n")
-    : "";
+function getFileContent(files, inputFormat) {
+  const existingFiles = files.filter(file => existsSync(file));
+  const parser = createParser(inputFormat);
+  return existingFiles.map(file => {
+    console.log(`Parsing ${file}`);
+    return parser.parse(file);
+  });
 }
 
 function getFSDate(filePath) {
@@ -63,23 +30,20 @@ function getGitDate(filePath) {
   return parseInt(gitDate.toString(), 10);
 }
 
-function getAllFileContent(inputDir, inputType) {
+function getSortedFiles(inputDir, inputType) {
   const textFiles = readdirSync(join(cwd(), inputDir));
-  const parsedFiles = textFiles.map((file) => {
+  const foundFiles = textFiles.map(file => {
     return {
       name: file,
       time:
-        inputType === "git"
+        inputType === 'git'
           ? getGitDate(join(inputDir, file))
           : getFSDate(join(cwd(), inputDir, file)),
     };
   });
-  const sortedFiles = parsedFiles
+  return foundFiles
     .sort((file1, file2) => file2.time - file1.time)
-    .map((file) => file.name);
-  return sortedFiles.reduce((output, file) => {
-    return output.concat(getFileContent(join(cwd(), inputDir, file)));
-  }, []);
+    .map(file => join(cwd(), inputDir, file.name));
 }
 
 function createOutputFile(outputDir, filename) {
@@ -90,23 +54,11 @@ function createOutputFile(outputDir, filename) {
 }
 
 export default function createWebsite() {
-  const configFile = getConfigFile(argv);
-  const Configuration = new BlankpageConfig(configFile);
-  const OutputFile = createOutputFile(
-    Configuration.output,
-    Configuration.filename,
-  );
-  const template = getIndexTemplate(Configuration);
-  const fileContent = getAllFileContent(
-    Configuration.input,
-    Configuration.inputType,
-  );
-  writeFileSync(OutputFile, template[0]);
-  fileContent.forEach((line) => {
-    if (line !== "") {
-      appendFileSync(OutputFile, `<p>${line}</p>\n`);
-    }
-  });
-  appendFileSync(OutputFile, template[1]);
+  const conf = getConfigFile(argv);
+  const OutputFile = createOutputFile(conf.output, conf.filename);
+  const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
+  const posts = getFileContent(sortedFiles, conf.inputFormat);
+  const template = renderTemplate(posts, conf);
+  writeFileSync(OutputFile, template);
   console.log(`Output blankpage to ${OutputFile}`);
 }
