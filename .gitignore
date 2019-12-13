@@ -2,7 +2,6 @@ text
 yarn.lock
 node_modules
 *.swp
-package-lock.json
 .public
 *.js
 website.json
