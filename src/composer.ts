@@ -1,16 +1,16 @@
-import { execSync } from 'child_process';
+import { execSync } from "child_process";
 import {
   existsSync,
   mkdirSync,
   readdirSync,
   statSync,
-  writeFileSync,
-} from 'fs';
-import { join } from 'path';
-import { argv, cwd } from 'process';
-import { getConfigFile } from './config';
-import { renderTemplate } from './templater';
-import { createParser } from './parser-factory';
+  writeFileSync
+} from "fs";
+import { join } from "path";
+import { argv, cwd } from "process";
+import { getConfigFile } from "./config";
+import { renderTemplate } from "./templater";
+import { createParser } from "./parser-factory";
 
 function getFileContent(files, inputFormat) {
   const existingFiles = files.filter(file => existsSync(file));
@@ -36,9 +36,9 @@ function getSortedFiles(inputDir, inputType) {
     return {
       name: file,
       time:
-        inputType === 'git'
+        inputType === "git"
           ? getGitDate(join(inputDir, file))
-          : getFSDate(join(cwd(), inputDir, file)),
+          : getFSDate(join(cwd(), inputDir, file))
     };
   });
   return foundFiles
@@ -53,7 +53,7 @@ function createOutputFile(outputDir, filename) {
   return join(outputDir, `${filename}`);
 }
 
-export default function createWebsite() {
+export function createWebsite() {
   const conf = getConfigFile(argv);
   const OutputFile = createOutputFile(conf.output, conf.filename);
   const sortedFiles = getSortedFiles(conf.input, conf.inputSort);

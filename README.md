@@ -113,7 +113,6 @@ Configuration options:
 ### Plans
 
 1. Add possibility to pretty-print the html.
-2. Markdown support
-3. Create separate pages for each content element.
-4. Better README
-5. PERFORMANCE
+2. Create separate pages for each content element.
+3. Better README
+4. PERFORMANCE

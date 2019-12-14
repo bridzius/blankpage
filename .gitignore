@@ -7,3 +7,4 @@ node_modules
 website.json
 template.html
 .vscode
+.DS_Store
