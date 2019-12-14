@@ -16,22 +16,29 @@
     "compile": "tsc",
     "test": "jest",
     "start": "tsc -w",
-    "verify": "tslint 'src/**/*.ts'"
+    "verify": "eslint 'src/**/*.ts'"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "!dist/**/*.test.js"
   ],
   "author": "Jurgis Bridzius",
   "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "@types/marked": "^0.7.1",
-    "@types/node": "^8.10.49",
-    "jest": "^24.9.0",
-    "marked": "^0.7.0",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.2.0",
-    "tslint": "^5.17.0",
-    "typescript": "^3.7.3"
+    "@types/jest": "^24.9.1",
+    "@types/marked": "^0.7.2",
+    "@types/node": "^13.1.6",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prefer-arrow": "^1.1.7",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.0.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "marked": "^0.8.0"
+  }
 }

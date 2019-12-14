@@ -1,6 +1,6 @@
 import { MarkdownParser } from "./md.parser";
-import { ParserTypes } from "./parser";
 import { PlainParser } from "./plain.parser";
+import { ParserTypes } from "./types";
 
 export function createParser(type: ParserTypes) {
   switch (type) {

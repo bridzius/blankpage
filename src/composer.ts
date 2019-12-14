@@ -11,8 +11,9 @@ import { argv, cwd } from "process";
 import { getConfigFile } from "./config";
 import { renderTemplate } from "./templater";
 import { createParser } from "./parser-factory";
+import { InputSorts, ParserTypes } from "./types";
 
-function getFileContent(files, inputFormat) {
+function getFileContent(files: string[], inputFormat: ParserTypes): string[] {
   const existingFiles = files.filter(file => existsSync(file));
   const parser = createParser(inputFormat);
   return existingFiles.map(file => {
@@ -21,22 +22,29 @@ function getFileContent(files, inputFormat) {
   });
 }
 
-function getFSDate(filePath) {
-  return statSync(filePath).mtime.getTime();
+function getFSDate(filePath: string): number {
+  return Math.floor(statSync(filePath).mtime.getTime() / 1000);
 }
 
-function getGitDate(filePath) {
+function getGitDate(filePath: string) {
   const gitDate = execSync(`git log -1 --format="%at" -- ${filePath}`);
-  return parseInt(gitDate.toString(), 10);
+  let date = parseInt(gitDate.toString(), 10);
+  if (isNaN(date)) {
+    console.log(
+      `No git date found for ${filePath} - checking filesystem creation time`
+    );
+    date = getFSDate(join(cwd(), filePath));
+  }
+  return date;
 }
 
-function getSortedFiles(inputDir, inputType) {
+function getSortedFiles(inputDir: string, inputType: InputSorts) {
   const textFiles = readdirSync(join(cwd(), inputDir));
   const foundFiles = textFiles.map(file => {
     return {
       name: file,
       time:
-        inputType === "git"
+        inputType === InputSorts.Git
           ? getGitDate(join(inputDir, file))
           : getFSDate(join(cwd(), inputDir, file))
     };
@@ -46,7 +54,7 @@ function getSortedFiles(inputDir, inputType) {
     .map(file => join(cwd(), inputDir, file.name));
 }
 
-function createOutputFile(outputDir, filename) {
+function createOutputFile(outputDir: string, filename: string) {
   if (!existsSync(join(cwd(), outputDir))) {
     mkdirSync(join(cwd(), outputDir));
   }

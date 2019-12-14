@@ -1,7 +1,4 @@
-export enum ParserTypes {
-  Markdown = 'md',
-  Plain = 'txt',
-}
+import { ParserTypes } from "./types";
 
 export abstract class Parser {
   public abstract get label(): ParserTypes;
