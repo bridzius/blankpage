@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./dist",
     "target": "es6",
     "lib": ["ES2015"],
-    "module": "commonjs"
-  }
+    "module": "commonjs",
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

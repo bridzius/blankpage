@@ -1,112 +1,75 @@
 import { execSync } from "child_process";
 import {
-  appendFileSync,
   existsSync,
   mkdirSync,
   readdirSync,
-  readFileSync,
   statSync,
-  writeFileSync,
+  writeFileSync
 } from "fs";
-import { extname, join } from "path";
+import { join } from "path";
 import { argv, cwd } from "process";
-import { BlankpageConfig, IBlankConfig } from "./config";
+import { getConfigFile } from "./config";
+import { renderTemplate } from "./templater";
+import { createParser } from "./parser-factory";
+import { InputSorts, ParserTypes } from "./types";
 
-function getConfigFile(args) {
-  const simplifiedArgs: string[] = args.slice(2);
-  if (
-    typeof simplifiedArgs[0] === "string" &&
-    extname(simplifiedArgs[0]) === ".json" &&
-    existsSync(simplifiedArgs[0])
-  ) {
-    return simplifiedArgs[0];
-  } else {
-    throw Error("No input file specified");
-  }
-}
+const parseFileContent = (
+  files: string[],
+  inputFormat: ParserTypes
+): string[] => {
+  const existingFiles = files.filter(file => existsSync(file));
+  const parser = createParser(inputFormat);
+  return existingFiles.map(file => {
+    console.log(`Parsing ${file}`);
+    return parser.parse(file);
+  });
+};
 
-function getIndexTemplate(data: IBlankConfig) {
-  const templatePath = join(cwd(), "template.html");
-  const templateExists = existsSync(templatePath);
-  if (!templateExists) {
-    throw Error("no template file");
-  }
-  let template = readFileSync(templatePath).toString();
-  template = template.replace("<head>", `<head>\n<title>${data.title}</title>`);
-  for (const opt in data.slots) {
-    if (data.slots.hasOwnProperty(opt)) {
-      template = template.replace(
-        `<//${opt.toUpperCase()}//>`,
-        data.slots[opt],
-      );
-    }
-  }
-  return template.split("<//CONTENT//>");
-}
+const getFSDate = (filePath: string): number => {
+  return Math.floor(statSync(filePath).mtime.getTime() / 1000);
+};
 
-function getFileContent(filePath) {
-  console.log(`Reading ${filePath}`);
-  const fileExists = existsSync(filePath);
-  return fileExists
-    ? readFileSync(filePath)
-        .toString()
-        .split("\n")
-    : "";
-}
-
-function getFSDate(filePath) {
-  return statSync(filePath).mtime.getTime();
-}
-
-function getGitDate(filePath) {
+const getGitDate = (filePath: string) => {
   const gitDate = execSync(`git log -1 --format="%at" -- ${filePath}`);
-  return parseInt(gitDate.toString(), 10);
-}
+  let date = parseInt(gitDate.toString(), 10);
+  if (isNaN(date)) {
+    console.log(
+      `No git date found for ${filePath} - checking filesystem creation time`
+    );
+    date = getFSDate(join(cwd(), filePath));
+  }
+  return date;
+};
 
-function getAllFileContent(inputDir, inputType) {
+const getSortedFiles = (inputDir: string, inputType: InputSorts) => {
   const textFiles = readdirSync(join(cwd(), inputDir));
-  const parsedFiles = textFiles.map((file) => {
+  const foundFiles = textFiles.map(file => {
     return {
       name: file,
       time:
-        inputType === "git"
+        inputType === InputSorts.Git
           ? getGitDate(join(inputDir, file))
-          : getFSDate(join(cwd(), inputDir, file)),
+          : getFSDate(join(cwd(), inputDir, file))
     };
   });
-  const sortedFiles = parsedFiles
+  return foundFiles
     .sort((file1, file2) => file2.time - file1.time)
-    .map((file) => file.name);
-  return sortedFiles.reduce((output, file) => {
-    return output.concat(getFileContent(join(cwd(), inputDir, file)));
-  }, []);
-}
+    .map(file => join(cwd(), inputDir, file.name));
+};
 
-function createOutputFile(outputDir, filename) {
+const createOutputFile = (outputDir: string, filename: string) => {
   if (!existsSync(join(cwd(), outputDir))) {
     mkdirSync(join(cwd(), outputDir));
   }
   return join(outputDir, `${filename}`);
-}
+};
 
-export default function createWebsite() {
-  const configFile = getConfigFile(argv);
-  const Configuration = new BlankpageConfig(configFile);
-  const OutputFile = createOutputFile(
-    Configuration.output,
-    Configuration.filename,
-  );
-  const template = getIndexTemplate(Configuration);
-  const fileContent = getAllFileContent(
-    Configuration.input,
-    Configuration.inputType,
-  );
-  writeFileSync(OutputFile, template[0]);
-  fileContent.forEach((line) => {
-    if (line !== "") {
-      appendFileSync(OutputFile, `<p>${line}</p>\n`);
-    }
-  });
-  appendFileSync(OutputFile, template[1]);
+export const createWebsite = () => {
+  const conf = getConfigFile(argv);
+  const OutputFile = createOutputFile(conf.output, conf.filename);
+  const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
+  const posts = parseFileContent(sortedFiles, conf.inputFormat);
+  const template = renderTemplate(posts, conf);
+  writeFileSync(OutputFile, template);
   console.log(`Output blankpage to ${OutputFile}`);
-}
+};
