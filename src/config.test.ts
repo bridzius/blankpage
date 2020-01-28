@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { BlankpageConfig, IBlankConfig } from "./config";
 import { ConfigurationError } from "./config-error";
 describe("config.ts", () => {
-  it("should throw an error if no path is provided to constructor", () => {
+  test("should throw an error if no path is provided to constructor", () => {
     expect(() => {
       new BlankpageConfig("");
     }).toThrow(ConfigurationError);
@@ -18,7 +18,7 @@ describe("config.ts", () => {
       new BlankpageConfig("hello.json");
     }).toThrow(ConfigurationError);
   });
-  it("should throw if no output is defined in website.json", () => {
+  test("should throw if no output is defined in website.json", () => {
     jest.spyOn(fs, "existsSync").mockReturnValue(true);
     jest.spyOn(fs, "readFileSync").mockReturnValue(`{
             "title": "Website",
@@ -29,27 +29,28 @@ describe("config.ts", () => {
       new BlankpageConfig("hello.json");
     }).toThrow(ConfigurationError);
   });
-  it("should throw if inputType is random", () => {
+  test("should throw if inputType is random", () => {
     jest.spyOn(fs, "existsSync").mockReturnValue(true);
     jest.spyOn(fs, "readFileSync").mockReturnValue(`{
             "title": "Website",
             "header": "My website",
             "input": "welcome",
             "output": "goodbye",
-            "inputType": "email"
+            "inputSort": "email"
         }`);
     expect(() => {
-      new BlankpageConfig("hello.json");
+      const hi = new BlankpageConfig("hello.json");
+      console.log(hi);
     }).toThrow(ConfigurationError);
   });
-  it("should not throw if inputType is git", () => {
+  test("should not throw if inputType is git", () => {
     jest.spyOn(fs, "existsSync").mockReturnValue(true);
     jest.spyOn(fs, "readFileSync").mockReturnValue(`{
             "title": "Website",
             "header": "My website",
             "input": "welcome",
             "output": "random",
-            "inputType": "git"
+            "inputSort": "git"
         }`);
     expect(() => {
       new BlankpageConfig("hello.json");

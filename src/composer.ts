@@ -13,20 +13,23 @@ import { renderTemplate } from "./templater";
 import { createParser } from "./parser-factory";
 import { InputSorts, ParserTypes } from "./types";
 
-function getFileContent(files: string[], inputFormat: ParserTypes): string[] {
+const parseFileContent = (
+  files: string[],
+  inputFormat: ParserTypes
+): string[] => {
   const existingFiles = files.filter(file => existsSync(file));
   const parser = createParser(inputFormat);
   return existingFiles.map(file => {
     console.log(`Parsing ${file}`);
     return parser.parse(file);
   });
-}
+};
 
-function getFSDate(filePath: string): number {
+const getFSDate = (filePath: string): number => {
   return Math.floor(statSync(filePath).mtime.getTime() / 1000);
-}
+};
 
-function getGitDate(filePath: string) {
+const getGitDate = (filePath: string) => {
   const gitDate = execSync(`git log -1 --format="%at" -- ${filePath}`);
   let date = parseInt(gitDate.toString(), 10);
   if (isNaN(date)) {
@@ -36,9 +39,9 @@ function getGitDate(filePath: string) {
     date = getFSDate(join(cwd(), filePath));
   }
   return date;
-}
+};
 
-function getSortedFiles(inputDir: string, inputType: InputSorts) {
+const getSortedFiles = (inputDir: string, inputType: InputSorts) => {
   const textFiles = readdirSync(join(cwd(), inputDir));
   const foundFiles = textFiles.map(file => {
     return {
@@ -52,21 +55,21 @@ function getSortedFiles(inputDir: string, inputType: InputSorts) {
   return foundFiles
     .sort((file1, file2) => file2.time - file1.time)
     .map(file => join(cwd(), inputDir, file.name));
-}
+};
 
-function createOutputFile(outputDir: string, filename: string) {
+const createOutputFile = (outputDir: string, filename: string) => {
   if (!existsSync(join(cwd(), outputDir))) {
     mkdirSync(join(cwd(), outputDir));
   }
   return join(outputDir, `${filename}`);
-}
+};
 
-export function createWebsite() {
+export const createWebsite = () => {
   const conf = getConfigFile(argv);
   const OutputFile = createOutputFile(conf.output, conf.filename);
   const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
-  const posts = getFileContent(sortedFiles, conf.inputFormat);
+  const posts = parseFileContent(sortedFiles, conf.inputFormat);
   const template = renderTemplate(posts, conf);
   writeFileSync(OutputFile, template);
   console.log(`Output blankpage to ${OutputFile}`);
-}
+};

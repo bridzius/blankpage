@@ -16,7 +16,7 @@ export interface IBlankConfig {
   };
 }
 
-export function getConfigFile(args: string[]) {
+export const getConfigFile = (args: string[]) => {
   const simplifiedArgs: string[] = args.slice(2);
   if (
     typeof simplifiedArgs[0] === "string" &&
@@ -27,7 +27,7 @@ export function getConfigFile(args: string[]) {
   } else {
     throw Error("No input file specified");
   }
-}
+};
 
 export class BlankpageConfig implements IBlankConfig {
   public filename: string;
@@ -52,14 +52,14 @@ export class BlankpageConfig implements IBlankConfig {
   }
 }
 
-function getBlankConf(confpath: string) {
+const getBlankConf = (confpath: string) => {
   if (existsSync(confpath)) {
     return JSON.parse(readFileSync(confpath).toString());
   }
   throw new ConfigurationError(CONF_ERROR_MESSAGES.CONFIG_FILE_MISSING);
-}
+};
 
-function validate(config: IBlankConfig) {
+const validate = (config: IBlankConfig) => {
   if (isUndefined(config, "input")) {
     throw new ConfigurationError(CONF_ERROR_MESSAGES.NO_INPUT_DEFINED);
   }
@@ -72,8 +72,8 @@ function validate(config: IBlankConfig) {
   ) {
     throw new ConfigurationError(CONF_ERROR_MESSAGES.INVALID_INPUT_TYPE);
   }
-}
+};
 
-function isUndefined(object: object, property: string) {
+const isUndefined = (object: object, property: string) => {
   return !object.hasOwnProperty(property);
-}
+};
