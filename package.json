@@ -38,6 +38,6 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "marked": "^0.8.0"
+    "marked": "^0.8.2"
   }
 }
