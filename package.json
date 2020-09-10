@@ -11,8 +11,6 @@
     "url": "https://github.com/bridzius/blankpage.git"
   },
   "scripts": {
-    "prepublishOnly": "npm run compile",
-    "compile": "tsc",
     "test": "jest",
     "start": "tsc -w",
     "verify": "eslint 'src/**/*.ts'"
@@ -33,6 +31,7 @@
     "eslint-plugin-prefer-arrow": "^1.1.7",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
     "ts-jest": "^24.3.0",
     "tslint": "^6.0.0",
     "typescript": "^3.7.5"

@@ -3,8 +3,10 @@ yarn.lock
 node_modules
 *.swp
 .public
-*.js
 website.json
 template.html
+*.js
+!scripts/*js
 .vscode
 .DS_Store
+dist/
