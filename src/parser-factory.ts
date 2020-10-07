@@ -2,7 +2,7 @@ import { MarkdownParser } from "./md.parser";
 import { PlainParser } from "./plain.parser";
 import { ParserTypes } from "./types";
 
-export function createParser(type: ParserTypes) {
+export const createParser = (type: ParserTypes) => {
   switch (type) {
     case ParserTypes.Markdown:
       return new MarkdownParser();

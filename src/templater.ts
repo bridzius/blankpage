@@ -3,21 +3,7 @@ import { join } from "path";
 import { cwd } from "process";
 import { existsSync, readFileSync } from "fs";
 
-export function renderTemplate(posts: string[], config: IBlankConfig) {
-  const template = getIndexTemplate(config);
-  const content = posts.reduce(
-    (current, post) => (current += `<article>\n${post}</article>\n`),
-    ""
-  );
-  const prettyTemplate = `
-  ${template[0]}
-  ${content}
-  ${template[1]}
-  `;
-  return prettyTemplate;
-}
-
-function getIndexTemplate(data: IBlankConfig) {
+const getIndexTemplate = (data: IBlankConfig) => {
   const templatePath = join(cwd(), "template.html");
   const templateExists = existsSync(templatePath);
   if (!templateExists) {
@@ -32,4 +18,18 @@ function getIndexTemplate(data: IBlankConfig) {
     );
   });
   return template.split("<//CONTENT//>");
+}
+
+export const renderTemplate = (posts: string[], config: IBlankConfig) => {
+  const template = getIndexTemplate(config);
+  const content = posts.reduce(
+    (current, post) => (current += `<article>\n${post}</article>\n`),
+    ""
+  );
+  const prettyTemplate = `
+  ${template[0]}
+  ${content}
+  ${template[1]}
+  `;
+  return prettyTemplate;
 }

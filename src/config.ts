@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import { CONF_ERROR_MESSAGES, ConfigurationError } from "./config-error";
+import { ConfigurationErrorMessages, ConfigurationError } from "./config-error";
 import { extname } from "path";
 import { InputSorts, ParserTypes } from "./types";
 
@@ -56,24 +56,24 @@ const getBlankConf = (confpath: string) => {
   if (existsSync(confpath)) {
     return JSON.parse(readFileSync(confpath).toString());
   }
-  throw new ConfigurationError(CONF_ERROR_MESSAGES.CONFIG_FILE_MISSING);
+  throw new ConfigurationError(ConfigurationErrorMessages.ConfigFileMissing);
 };
 
-const validate = (config: IBlankConfig) => {
+const validate = (config: Partial<IBlankConfig>) => {
   if (isUndefined(config, "input")) {
-    throw new ConfigurationError(CONF_ERROR_MESSAGES.NO_INPUT_DEFINED);
+    throw new ConfigurationError(ConfigurationErrorMessages.NoInputDefined);
   }
   if (isUndefined(config, "output")) {
-    throw new ConfigurationError(CONF_ERROR_MESSAGES.NO_OUTPUT_DEFINED);
+    throw new ConfigurationError(ConfigurationErrorMessages.NoOutputDefined);
   }
   if (
     !isUndefined(config, "inputSort") &&
     !["fs", "git"].some(type => type === config.inputSort)
   ) {
-    throw new ConfigurationError(CONF_ERROR_MESSAGES.INVALID_INPUT_TYPE);
+    throw new ConfigurationError(ConfigurationErrorMessages.InvalidInputType);
   }
 };
 
-const isUndefined = (object: object, property: string) => {
+const isUndefined = (object: Record<string, unknown>, property: string) => {
   return !object.hasOwnProperty(property);
 };

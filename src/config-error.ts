@@ -5,9 +5,9 @@ export class ConfigurationError extends Error {
   }
 }
 
-export enum CONF_ERROR_MESSAGES {
-  NO_OUTPUT_DEFINED = "No output defined in website.json (output: 'outputDir')",
-  NO_INPUT_DEFINED = "No input defined in website.json (input: 'dir where text files are')",
-  INVALID_INPUT_TYPE = "Invalid input type. Choose from git|fs",
-  CONFIG_FILE_MISSING = "Configuration file does not exist"
+export enum ConfigurationErrorMessages {
+  NoOutputDefined = "No output defined in website.json (output: 'outputDir')",
+  NoInputDefined = "No input defined in website.json (input: 'dir where text files are')",
+  InvalidInputType = "Invalid input type. Choose from git|fs",
+  ConfigFileMissing = "Configuration file does not exist"
 }

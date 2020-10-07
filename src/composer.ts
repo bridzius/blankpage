@@ -66,10 +66,10 @@ const createOutputFile = (outputDir: string, filename: string) => {
 
 export const createWebsite = () => {
   const conf = getConfigFile(argv);
-  const OutputFile = createOutputFile(conf.output, conf.filename);
+  const outputFile = createOutputFile(conf.output, conf.filename);
   const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
   const posts = parseFileContent(sortedFiles, conf.inputFormat);
   const template = renderTemplate(posts, conf);
-  writeFileSync(OutputFile, template);
-  console.log(`Output blankpage to ${OutputFile}`);
+  writeFileSync(outputFile, template);
+  console.log(`Output blankpage to ${outputFile}`);
 };
