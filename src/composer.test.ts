@@ -1,5 +1,5 @@
 describe("composer.ts", () => {
-  it("should be dummy", () => {
-    expect(true).toBe(true);
-  });
+    it("should be dummy", () => {
+        expect(true).toBe(true);
+    });
 });

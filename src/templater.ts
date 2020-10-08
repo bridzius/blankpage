@@ -4,32 +4,35 @@ import { cwd } from "process";
 import { existsSync, readFileSync } from "fs";
 
 const getIndexTemplate = (data: IBlankConfig) => {
-  const templatePath = join(cwd(), "template.html");
-  const templateExists = existsSync(templatePath);
-  if (!templateExists) {
-    throw Error("no template file");
-  }
-  let template = readFileSync(templatePath).toString();
-  template = template.replace("<head>", `<head>\n<title>${data.title}</title>`);
-  Object.keys(data.slots).forEach((slot: "header" | "subheader") => {
+    const templatePath = join(cwd(), "template.html");
+    const templateExists = existsSync(templatePath);
+    if (!templateExists) {
+        throw Error("no template file");
+    }
+    let template = readFileSync(templatePath).toString();
     template = template.replace(
-      `<//${slot.toUpperCase()}//>`,
-      data.slots[slot]
+        "<head>",
+        `<head>\n<title>${data.title}</title>`
     );
-  });
-  return template.split("<//CONTENT//>");
-}
+    Object.keys(data.slots).forEach((slot: "header" | "subheader") => {
+        template = template.replace(
+            `<//${slot.toUpperCase()}//>`,
+            data.slots[slot]
+        );
+    });
+    return template.split("<//CONTENT//>");
+};
 
 export const renderTemplate = (posts: string[], config: IBlankConfig) => {
-  const template = getIndexTemplate(config);
-  const content = posts.reduce(
-    (current, post) => (current += `<article>\n${post}</article>\n`),
-    ""
-  );
-  const prettyTemplate = `
+    const template = getIndexTemplate(config);
+    const content = posts.reduce(
+        (current, post) => (current += `<article>\n${post}</article>\n`),
+        ""
+    );
+    const prettyTemplate = `
   ${template[0]}
   ${content}
   ${template[1]}
   `;
-  return prettyTemplate;
-}
+    return prettyTemplate;
+};
