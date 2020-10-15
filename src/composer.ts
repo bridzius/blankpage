@@ -55,7 +55,6 @@ const getSortedFiles = (inputDir: string, inputType: InputSorts) => {
         };
     });
     return sortFilesByTimeType(foundFiles, inputType)
-        .reverse()
         .map((f) => f.name);
 };
 
