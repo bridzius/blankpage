@@ -9,11 +9,10 @@ import {
 import { join } from "path";
 import { argv, cwd } from "process";
 import { getConfigFile } from "./config";
-import { renderTemplate } from "./templater";
-import { createParser } from "./parser-factory";
+import { renderTemplate } from "./writer";
+import { createParser } from "./parsers/parser-factory";
 import { InputSorts, ParserTypes, TimedFile } from "./types";
 import { sortCompare } from "./utils";
-
 
 const parseFileContent = (
     files: string[],
@@ -54,8 +53,7 @@ const getSortedFiles = (inputDir: string, inputType: InputSorts) => {
             },
         };
     });
-    return sortFilesByTimeType(foundFiles, inputType)
-        .map((f) => f.name);
+    return sortFilesByTimeType(foundFiles, inputType).map((f) => f.name);
 };
 
 /**
@@ -67,7 +65,6 @@ const sortFilesByTimeType = (
     files: TimedFile[],
     type: InputSorts
 ): TimedFile[] => {
-    console.log(files);
     if (type === InputSorts.FileSystem) {
         return files.sort((f1, f2) => sortCompare(f1.times.fs, f2.times.fs));
     } else {
@@ -92,7 +89,6 @@ export const createWebsite = () => {
     const conf = getConfigFile(argv);
     const outputFile = createOutputFile(conf.output, conf.filename);
     const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
-    console.log(sortedFiles);
     const posts = parseFileContent(sortedFiles, conf.inputFormat);
     const template = renderTemplate(posts, conf);
     writeFileSync(outputFile, template);

@@ -1,4 +1,4 @@
-import { ParserTypes } from "./types";
+import { ParserTypes } from "../types";
 
 export abstract class Parser {
     public abstract get label(): ParserTypes;

@@ -1,6 +1,6 @@
 import { Parser } from "./parser";
 import { readFileSync } from "fs";
-import { ParserTypes } from "./types";
+import { ParserTypes } from "../types";
 export class PlainParser implements Parser {
     private parserType = ParserTypes.Plain;
     public get label() {

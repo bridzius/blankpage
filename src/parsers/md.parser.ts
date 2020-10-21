@@ -1,7 +1,7 @@
 import { Parser } from "./parser";
 import * as marked from "marked";
 import { readFileSync } from "fs";
-import { ParserTypes } from "./types";
+import { ParserTypes } from "../types";
 
 export class MarkdownParser implements Parser {
     private parserType = ParserTypes.Markdown;
