@@ -89,7 +89,8 @@ Example:
   "inputSort": "fs|git",
   "inputFormat": "txt|md",
   "output": "OutDirForHTMLFile",
-  "filename": "HTMLFileName"
+  "filename": "HTMLFileName",
+  "highlight": "theme-name"
 }
 ```
 
@@ -106,6 +107,7 @@ Configuration options:
 | `inputFormat` | The format of the input files. Support: `md` - Markdown, `txt` - Plain text files| `txt` |
 | `output`    | The output directory, where the index file will be generated. | `dist` |
 | `filename`  | The name of the index file. | `index.html` |
+| `highlight` | Enable syntax highlighting. Omit parameter for no syntax highlighting. Setting to empty string will set default theme. Themes are available at https://highlightjs.org/static/demo/.  Set to theme name for non-default theme. | false |
 <!-- prettier-ignore-end -->
 
 ---
