@@ -14,6 +14,7 @@ export interface IBlankConfig {
         subheader: string;
         header: string;
     };
+    highlight: string | undefined;
 }
 
 export const getConfigFile = (args: string[]) => {
@@ -37,6 +38,7 @@ export class BlankpageConfig implements IBlankConfig {
     public inputFormat: ParserTypes;
     public output: string;
     public slots: { subheader: string; header: string };
+    public highlight: string | undefined;
     constructor(confpath: any) {
         const conf = getBlankConf(confpath);
         validate(conf);
@@ -49,6 +51,7 @@ export class BlankpageConfig implements IBlankConfig {
         this.slots.header = conf.header || "";
         this.slots.subheader = conf.subheader || "";
         this.filename = conf.filename || "index.html";
+        this.highlight = conf.highlight;
     }
 }
 
