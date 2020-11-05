@@ -5,7 +5,6 @@ node_modules
 .public
 website.json
 template.html
-*.js
 !scripts/*js
 .vscode
 .DS_Store
