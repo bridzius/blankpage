@@ -1,6 +1,6 @@
 {
   "name": "blankpage",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Composing static html blog pages",
   "main": "dist/index.js",
   "bin": {
