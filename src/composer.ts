@@ -4,16 +4,16 @@ import {
     mkdirSync,
     readdirSync,
     statSync,
-    writeFileSync,
+    writeFileSync
 } from "fs";
 import { join } from "path";
 import { argv, cwd } from "process";
 import { getConfigFile, IBlankConfig } from "./config";
-import { renderTemplate } from "./writer";
+import { Parser, ParserOptions } from "./parsers/parser";
 import { createParser } from "./parsers/parser-factory";
 import { InputSorts, TimedFile } from "./types";
 import { sortCompare } from "./utils";
-import { Parser, ParserOptions } from "./parsers/parser";
+import { renderTemplate } from "./writer";
 
 const configureParser = (
     parser: Parser,
@@ -57,6 +57,7 @@ const getSortedFiles = (inputDir: string, inputType: InputSorts) => {
             },
         };
     });
+    console.table(foundFiles);
     return sortFilesByTimeType(foundFiles, inputType).map((f) => f.name);
 };
 
