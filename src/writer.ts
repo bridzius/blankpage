@@ -3,6 +3,7 @@ import { join } from "path";
 import { cwd } from "process";
 import { existsSync, readFileSync } from "fs";
 import { ParserOptions } from "./parsers/parser";
+import { Post } from "./types";
 
 const getHeadContent = (title: string, parserOpts: ParserOptions): string => {
     let head = "<head>";
@@ -34,13 +35,13 @@ const getIndexTemplate = (data: IBlankConfig, parserOpts: ParserOptions) => {
 };
 
 export const renderTemplate = (
-    posts: string[],
+    posts: Post[],
     config: IBlankConfig,
     parserOpts: ParserOptions
 ) => {
     const template = getIndexTemplate(config, parserOpts);
     const content = posts.reduce(
-        (current, post) => (current += `<article>\n${post}</article>\n`),
+        (current, post) => (current += `<article>\n${post.text}</article>\n`),
         ""
     );
     const prettyTemplate = `

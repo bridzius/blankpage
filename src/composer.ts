@@ -4,29 +4,24 @@ import {
     mkdirSync,
     readdirSync,
     statSync,
-    writeFileSync
+    writeFileSync,
 } from "fs";
 import { join } from "path";
 import { argv, cwd } from "process";
 import { getConfigFile, IBlankConfig } from "./config";
 import { Parser, ParserOptions } from "./parsers/parser";
 import { createParser } from "./parsers/parser-factory";
-import { InputSorts, TimedFile } from "./types";
+import { InputSorts, TimedFile, Post } from "./types";
 import { sortCompare } from "./utils";
 import { renderTemplate } from "./writer";
 
-const configureParser = (
-    parser: Parser,
-    config: IBlankConfig
-): ParserOptions => {
-    return parser.setup(config);
-};
-
-const parseFileContent = (parser: Parser, files: string[]): string[] => {
+const parseFileContent = (parser: Parser, files: string[]): Post[] => {
     const existingFiles = files.filter((file) => existsSync(file));
     return existingFiles.map((file) => {
         console.log(`Parsing ${file}`);
-        return parser.parse(file);
+        const text = parser.parse(file);
+        const metadata = {};
+        return { metadata, text };
     });
 };
 
@@ -93,10 +88,9 @@ const createOutputFile = (outputDir: string, filename: string) => {
 export const createWebsite = () => {
     const conf = getConfigFile(argv);
     const sortedFiles = getSortedFiles(conf.input, conf.inputSort);
-    const parser = createParser(conf.inputFormat);
-    const parserOpts: ParserOptions = configureParser(parser, conf);
-    const posts = parseFileContent(parser, sortedFiles);
-    const template = renderTemplate(posts, conf, parserOpts);
+    const selectedParser = createParser(conf.inputFormat).setup(conf);
+    const posts: Post[] = parseFileContent(selectedParser, sortedFiles);
+    const template = renderTemplate(posts, conf, selectedParser.options);
     const outputFile = createOutputFile(conf.output, conf.filename);
     writeFileSync(outputFile, template);
     console.log(`Output blankpage to ${outputFile}`);

@@ -1,4 +1,4 @@
-import { MarkdownParser } from "./md.parser";
+import { MarkdownParser } from "./markdown.parser";
 import { Parser } from "./parser";
 import { PlainParser } from "./plain.parser";
 import { Dictionary, ParserTypes } from "../types";

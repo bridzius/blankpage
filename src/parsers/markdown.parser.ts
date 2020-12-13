@@ -9,13 +9,18 @@ import { existsSync } from "fs";
 
 export class MarkdownParser implements Parser {
     private parserType = ParserTypes.Markdown;
+    private parserOptions = {};
     public get label() {
         return this.parserType;
     }
-    public parse(inputFile: string): string {
-        return marked(readFileSync(inputFile).toString());
+    public get options() {
+        return this.parserOptions;
     }
-    public setup(config: IBlankConfig): ParserOptions {
+    public parse(inputFile: string): string {
+        const fileContent = readFileSync(inputFile).toString();
+        return marked(fileContent);
+    }
+    public setup(config: IBlankConfig): MarkdownParser {
         let options: ParserOptions = {};
         if (typeof config.highlight !== "undefined") {
             const highlightModulePath = require
@@ -37,6 +42,7 @@ export class MarkdownParser implements Parser {
                 },
             });
         }
-        return options;
+        this.parserOptions = options;
+        return this;
     }
 }

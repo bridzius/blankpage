@@ -4,13 +4,17 @@ import { ParserTypes } from "../types";
 import { IBlankConfig } from "../config";
 export class PlainParser implements Parser {
     private parserType = ParserTypes.Plain;
+    private parserOptions = {};
     public get label() {
         return this.parserType;
+    }
+    public get options() {
+        return this.parserOptions;
     }
     public parse(inputFile: string): string {
         return readFileSync(inputFile).toString();
     }
-    public setup(_config: IBlankConfig): ParserOptions {
-        return {};
+    public setup(_config: IBlankConfig): PlainParser {
+        return this;
     }
 }
