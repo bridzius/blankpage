@@ -82,15 +82,15 @@ Example:
 
 ```json
 {
-  "title": "Website.com",
-  "header": "Neat website",
-  "subheader": "Javascript junkie.",
-  "input": "InputDirectoryWithTextFiles",
-  "inputSort": "fs|git",
-  "inputFormat": "txt|md",
-  "output": "OutDirForHTMLFile",
-  "filename": "HTMLFileName",
-  "highlight": "theme-name"
+    "title": "Website.com",
+    "header": "Neat website",
+    "subheader": "Javascript junkie.",
+    "input": "InputDirectoryWithTextFiles",
+    "inputSort": "fs|git",
+    "inputFormat": "txt|md",
+    "output": "OutDirForHTMLFile",
+    "filename": "HTMLFileName",
+    "highlight": "theme-name"
 }
 ```
 

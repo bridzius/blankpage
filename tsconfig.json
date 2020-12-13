@@ -1,11 +1,12 @@
 {
-  "compilerOptions": {
-    "outDir": "./dist",
-    "target": "es6",
-    "lib": ["ES2015"],
-    "module": "commonjs",
-    "noImplicitAny": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "es6",
+        "lib": ["ES2015"],
+        "module": "commonjs",
+        "noImplicitAny": true
+    },
+    "preserveSymlinks": true,
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
 }
