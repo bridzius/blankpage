@@ -8,4 +8,5 @@ template.html
 !scripts/*js
 .vscode
 .DS_Store
+NOTES.md
 dist/

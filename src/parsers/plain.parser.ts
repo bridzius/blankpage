@@ -11,8 +11,8 @@ export class PlainParser implements Parser {
     public get options() {
         return this.parserOptions;
     }
-    public parse(inputFile: string): string {
-        return readFileSync(inputFile).toString();
+    public parse(fileContent: string): string {
+        return fileContent;
     }
     public setup(_config: IBlankConfig): PlainParser {
         return this;

@@ -17,10 +17,3 @@ export interface TimedFile {
         fs: number;
     };
 }
-export interface Post {
-    metadata: {
-        title?: string;
-        date?: string;
-    };
-    text: string;
-}
