@@ -16,8 +16,7 @@ export class MarkdownParser implements Parser {
     public get options() {
         return this.parserOptions;
     }
-    public parse(inputFile: string): string {
-        const fileContent = readFileSync(inputFile).toString();
+    public parse(fileContent: string): string {
         return marked(fileContent);
     }
     public setup(config: IBlankConfig): MarkdownParser {
