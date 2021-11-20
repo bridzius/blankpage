@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { BlankpageConfig, IBlankConfig } from "./config";
+import { BlankpageConfig } from "./config";
 import { ConfigurationError } from "./config-error";
 describe("config.ts", () => {
     test("should throw an error if no path is provided to constructor", () => {

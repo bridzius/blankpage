@@ -18,4 +18,4 @@ export const extractMetadata = (file: string) => {
         );
     }
     return { fileContent, metadata };
-}
+};
