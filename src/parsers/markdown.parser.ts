@@ -1,7 +1,7 @@
 import { Parser, ParserOptions } from "./parser";
 import * as marked from "marked";
 import { readFileSync } from "fs";
-import { join, resolve, sep } from "path";
+import { join, sep } from "path";
 import { ParserTypes } from "../types";
 import { IBlankConfig } from "../config";
 import * as hljs from "highlight.js";

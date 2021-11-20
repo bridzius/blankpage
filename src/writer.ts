@@ -41,7 +41,8 @@ export const renderTemplate = (
 ) => {
     const template = getIndexTemplate(config, parserOpts);
     const content = posts.reduce(
-        (current, post) => (current += `<article>\n${post.content}</article>\n`),
+        (current, post) =>
+            (current += `<article>\n${post.content}</article>\n`),
         ""
     );
     const prettyTemplate = `
