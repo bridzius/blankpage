@@ -13,7 +13,8 @@
     "scripts": {
         "test": "jest",
         "start": "tsc -w",
-        "verify": "eslint 'src/**/*.ts'"
+        "verify": "eslint 'src/**/*.ts'",
+        "format": "prettier --write ."
     },
     "files": [
         "dist/",

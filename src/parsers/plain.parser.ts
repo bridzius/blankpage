@@ -1,20 +1,18 @@
 import { Parser, ParserOptions } from "./parser";
-import { readFileSync } from "fs";
 import { ParserTypes } from "../types";
-import { IBlankConfig } from "../config";
 export class PlainParser implements Parser {
     private parserType = ParserTypes.Plain;
-    private parserOptions = {};
+    private parserOptions: ParserOptions = {};
     public get label() {
         return this.parserType;
     }
-    public get options() {
+    public get options(): ParserOptions {
         return this.parserOptions;
     }
     public parse(fileContent: string): string {
         return fileContent;
     }
-    public setup(_config: IBlankConfig): PlainParser {
+    public setup(): PlainParser {
         return this;
     }
 }

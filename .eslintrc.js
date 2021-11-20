@@ -64,6 +64,7 @@ module.exports = {
                 },
             },
         ],
+        "@typescript-eslint/no-unused-vars": "error",
         camelcase: "error",
         complexity: "off",
         "constructor-super": "error",
