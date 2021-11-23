@@ -26,20 +26,6 @@ You can launch it from your terminal if globally installed:
 $ blankpage website.json
 ```
 
-Add to your `package.json` as an npm script:
-
-```json
-"scripts": {
-  "start": "blankpage website.json"
-}
-```
-
-Use `npx` to run when locally installed:
-
-```bash
-$ npx blankpage website.json
-```
-
 ---
 
 ## Template
@@ -112,9 +98,3 @@ Configuration options:
 
 ---
 
-### Plans
-
-1. Add possibility to pretty-print the html.
-2. Create separate pages for each content element.
-3. Better README
-4. PERFORMANCE

@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { ConfigurationErrorMessages, ConfigurationError } from "./config-error";
-import { extname } from "path";
+import { join, extname } from "path";
+import { cwd } from "process";
 import { InputSorts, ParserTypes } from "./types";
 
 export interface IBlankConfig {
@@ -15,6 +16,15 @@ export interface IBlankConfig {
         header: string;
     };
     highlight: string | undefined;
+}
+
+export function getFileConfig() {
+	const configFile = join(cwd(), 'website.json');
+	return existsSync(configFile) ? readFileSync(configFile) : {};
+}
+export function getArgConfig() {
+	//TODO: Add argument overrides for all config options
+	return {};
 }
 
 export const getConfigFile = (args: string[]) => {
