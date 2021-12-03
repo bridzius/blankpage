@@ -10,7 +10,6 @@ module.exports = {
     },
     plugins: [
         "@typescript-eslint",
-        "@typescript-eslint/tslint",
         "prefer-arrow",
     ],
     rules: {
@@ -55,15 +54,6 @@ module.exports = {
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/unified-signatures": "error",
         "@typescript-eslint/no-shadow": "error",
-        "@typescript-eslint/tslint/config": [
-            "error",
-            {
-                rules: {
-                    "jsdoc-format": true,
-                    "no-reference-import": true,
-                },
-            },
-        ],
         "@typescript-eslint/no-unused-vars": "error",
         camelcase: "error",
         complexity: "off",

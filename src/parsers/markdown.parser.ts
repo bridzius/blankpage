@@ -1,5 +1,5 @@
 import { Parser, ParserOptions } from "./parser";
-import * as marked from "marked";
+import { marked } from "marked";
 import { readFileSync } from "fs";
 import { join, sep } from "path";
 import { ParserTypes } from "../types";
@@ -36,7 +36,7 @@ export class MarkdownParser implements Parser {
             options = { ...options, addStyle };
             marked.setOptions({
                 langPrefix: "hljs language-",
-                highlight: (code, lang) => {
+                highlight: (code: string, lang: string) => {
                     return hljs.highlightAuto(code, [lang]).value;
                 },
             });

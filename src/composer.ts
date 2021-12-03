@@ -3,7 +3,7 @@ import { join } from "path";
 import { argv, cwd } from "process";
 import { getConfigFile } from "./config";
 import { createParser } from "./parsers/parser-factory";
-import { Post, PostConfig } from "./posts/post";
+import { Post } from "./posts/post";
 import { createPosts, getPostFiles } from "./reader";
 import { renderTemplate } from "./writer";
 
