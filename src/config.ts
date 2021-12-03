@@ -1,8 +1,14 @@
 import { existsSync, readFileSync } from "fs";
 import { ConfigurationErrorMessages, ConfigurationError } from "./config-error";
 import { join, extname } from "path";
-import { cwd } from "process";
+import { cwd, argv } from "process";
 import { InputSorts, ParserTypes } from "./types";
+import * as minimist from 'minimist'
+
+export interface BlankpageConfig {
+	postDir: string;
+	outDir: string;
+}
 
 export interface IBlankConfig {
     filename: string;
@@ -18,14 +24,11 @@ export interface IBlankConfig {
     highlight: string | undefined;
 }
 
-export function getFileConfig() {
+export const getFileConfig = () => {
 	const configFile = join(cwd(), 'website.json');
 	return existsSync(configFile) ? readFileSync(configFile) : {};
 }
-export function getArgConfig() {
-	//TODO: Add argument overrides for all config options
-	return {};
-}
+export const getArgConfig = () => minimist(argv.slice(2));
 
 export const getConfigFile = (args: string[]) => {
     const simplifiedArgs: string[] = args.slice(2);
