@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { createWebsite } from "./composer";
-import { getFileConfig, getArgConfig } from "./config";
+import { getConfig } from "./config";
 
-const config = { ...getFileConfig(), ...getArgConfig() };
+const config = getConfig();
 
 console.log(config);
 
